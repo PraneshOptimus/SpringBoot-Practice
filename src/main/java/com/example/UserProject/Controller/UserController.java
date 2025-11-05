@@ -39,4 +39,14 @@ public class UserController {
         userEn.setName(user.getName());
         return userRepo.save(userEn);
     }
+
+    @DeleteMapping("/all")
+    public void removeAll(){
+        userRepo.deleteAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public void removeById(@PathVariable long id){
+        userRepo.deleteById(id);
+    }
 }
