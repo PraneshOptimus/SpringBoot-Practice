@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/users").authenticated()
                 .anyRequest().permitAll())
 
-                .formLogin(form -> form.permitAll().defaultSuccessUrl("/dashboard"));
+                .formLogin(form -> form.permitAll().defaultSuccessUrl("/dashboard"))
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 
