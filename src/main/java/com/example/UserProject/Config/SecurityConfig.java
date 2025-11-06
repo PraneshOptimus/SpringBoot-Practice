@@ -3,6 +3,7 @@ package com.example.UserProject.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -17,29 +18,28 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
-        http.authorizeHttpRequests(authz -> authz.requestMatchers("/api/users/**").authenticated()
-                .requestMatchers("/home").permitAll()
-        )
-                .formLogin( form -> form.permitAll());
+    @Bean
+    public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception{
+        http.authorizeHttpRequests( authz -> authz
+                .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
+                .requestMatchers("/api/users").authenticated()
+                .anyRequest().permitAll())
+
+                .formLogin(form -> form.permitAll().defaultSuccessUrl("/dashboard"));
         return http.build();
     }
 
     @Bean
     public UserDetailsManager userDetailsManager(PasswordEncoder pass){
-        UserDetails user = User.withUsername("ASH")
-                .password(pass.encode("ASH123")).roles("USER").build();
-
-        UserDetails admin = User.withUsername("Pranesh")
-                .password(pass.encode("Pranesh123")).roles("ADMIN").build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        UserDetails user = User.withUsername("ASH").password(pass.encode("ASH123")).roles("USER").build();
+        UserDetails admin = User.withUsername("ADMIN").password(pass.encode("ADMIN123")).roles("ADMIN").build();
+        return new InMemoryUserDetailsManager(admin, user);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
 }

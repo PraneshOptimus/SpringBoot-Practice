@@ -14,4 +14,9 @@ public class HomeController {
         return "Welcome to Home Page";
     }
 
+    @GetMapping("/dashboard")
+    public String dashBoard(){
+        return "Login Successful";
+    }
+
 }

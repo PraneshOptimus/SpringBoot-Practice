@@ -28,7 +28,7 @@ public class UserController {
             return userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Name with this id :"+id+" is not found"));
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public UserEntity addUser(@RequestBody UserEntity userEntity){
         return userRepo.save(userEntity);
     }
