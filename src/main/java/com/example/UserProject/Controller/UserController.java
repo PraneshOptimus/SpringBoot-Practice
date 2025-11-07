@@ -5,6 +5,7 @@ import com.example.UserProject.Model.UserEntity;
 import com.example.UserProject.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public class UserController {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @GetMapping
     public List<UserEntity> showUser(){
         return  userRepo.findAll();
@@ -29,8 +33,9 @@ public class UserController {
     }
 
     @PostMapping
-    public UserEntity addUser(@RequestBody UserEntity userEntity){
-        return userRepo.save(userEntity);
+    public UserEntity addUser(@RequestBody UserEntity user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(user);
     }
 
     @PutMapping("/{id}")
